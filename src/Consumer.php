@@ -1,0 +1,134 @@
+<?php
+
+
+namespace Tzm\Rpc;
+
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+abstract class Consumer
+{
+    /**
+     * @var string
+     */
+    private $queueName;
+    public $result;
+
+
+    /**
+     * Consumer constructor.
+     * @param string $queueName
+     * @param $handleClass
+     * @throws \Exception
+     */
+    public function __construct(string $queueName = 'default')
+    {
+        $this->queueName = $queueName;
+    }
+
+    /**
+     * Get the message from Queue
+     *
+     * @param string $message
+     * @return mixed
+     */
+    abstract public function handleMessage($message);
+
+    /**
+     * Return the result of operation
+     *
+     * @return mixed
+     */
+    public function getResult()
+    {
+        return $this->result ?? true;
+    }
+
+    /**
+     * Message displayed when request received
+     *
+     * @param $req
+     * @param string|null $additional
+     * @return string
+     * @throws \Exception
+     */
+    protected function consoleInfo($req, string $additional = null)
+    {
+        $date = new \DateTime();
+        echo sprintf(" [%s] %s\n", $date->format('d.m H:i:s'), $this->consoleMessage($req) . ' ' . $additional);
+    }
+
+    /**
+     * Custom message for console info
+     *
+     * @param $req
+     * @return string
+     */
+    protected function consoleMessage($req)
+    {
+        return "New request";
+    }
+
+    /**
+     * Handle the error from handle message method
+     *
+     * @param \Exception $e
+     * @return mixed
+     */
+    abstract public function errorHandler(\Exception $e);
+
+    /**
+     * Run worker
+     *
+     * @throws \ErrorException
+     */
+    public function run()
+    {
+        $connection = new AMQPStreamConnection(
+            getenv('RABBTIMQ_HOST'),
+            getenv('RABBTIMQ_PORT'),
+            getenv('RABBTIMQ_USERNAME'),
+            getenv('RABBTIMQ_PASSWORD')
+        );
+
+        $channel = $connection->channel();
+
+        $channel->queue_declare($this->queueName, false, true, false, false);
+
+        echo " [x] Awaiting RPC requests\n";
+
+        $callback = function ($req) {
+
+            echo $this->consoleInfo($req, '=== Task Starts ===');
+
+            try {
+                $this->handleMessage($req->body);
+            } catch (\Exception $e) {
+                echo $this->consoleInfo($req, '=== Task Failed ===');
+                $this->errorHandler($e);
+            }
+
+            echo $this->consoleInfo($req, '=== Task Ends ===');
+
+            $msg = new AMQPMessage($this->getResult(), array('correlation_id' => $req->get('correlation_id')));
+
+            $req->delivery_info['channel']->basic_publish($msg, '', $req->get('reply_to'));
+            $req->delivery_info['channel']->basic_ack($req->delivery_info['delivery_tag']);
+        };
+
+        $channel->basic_qos(null, 1, null);
+        $channel->basic_consume($this->queueName, '', false, false, false, false, $callback);
+
+        while ($channel->is_consuming()) {
+            $channel->wait();
+        }
+
+        $channel->close();
+        $connection->close();
+    }
+
+}
+
+
+
+
