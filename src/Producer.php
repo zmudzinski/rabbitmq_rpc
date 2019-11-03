@@ -71,14 +71,14 @@ class Producer
         return $this;
     }
 
-    protected function onResponse($rep)
+    public function onResponse($rep)
     {
         if ($rep->get('correlation_id') == $this->corr_id) {
             $this->response = $rep->body;
         }
     }
 
-    public function call($message)
+    public function call(string $message)
     {
         $this->response = null;
         $this->corr_id = uniqid();
