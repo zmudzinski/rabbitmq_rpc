@@ -75,8 +75,6 @@ To process the queued message you need `Consumer` class. This class is abstract.
 You have to create a new class inherits from `Consumer` abstract class. Then you have to implement 
 several methods.
 
-Just like class `Producer` also have a `setQueueName()` method. 
-
 #### handleMessage()
 This method is responsible for process the message. It accepts `$message` as 
 a parameter e.g.
@@ -130,6 +128,9 @@ Then you can run the Consumer:
 $consumer = new EchoMessage();
 $consumer->run();
 ```
+Just like class `Producer` this one also have a `setQueueName()` method. So you can set the queue name  
+when new instance is creating or later by method. 
+
 #### Console information
 Additionally there are two methods:
 ##### consoleMessage($req) 
