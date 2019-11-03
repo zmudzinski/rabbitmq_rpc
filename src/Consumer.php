@@ -12,7 +12,7 @@ abstract class Consumer
      * @var string
      */
     private $queueName;
-    public $result;
+    private $result;
 
 
     /**
@@ -59,9 +59,20 @@ abstract class Consumer
      *
      * @return mixed
      */
-    public function getResult()
+    protected function getResult()
     {
         return $this->result ?? true;
+    }
+
+    /**
+     * Set the result of operation
+     *
+     * @param string $result
+     * @return mixed
+     */
+    protected function setResult(string $result)
+    {
+        $this->result = $result;
     }
 
     /**
