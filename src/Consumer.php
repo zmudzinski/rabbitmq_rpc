@@ -27,6 +27,18 @@ abstract class Consumer
     }
 
     /**
+     * Set the queue name
+     *
+     * @param string $queueName
+     * @return $this
+     */
+    public function setQueueName(string $queueName)
+    {
+        $this->queueName = $queueName;
+        return $this;
+    }
+
+    /**
      * Get the message from Queue
      *
      * @param string $message
@@ -76,14 +88,6 @@ abstract class Consumer
     {
         return "New request";
     }
-
-    /**
-     * Handle the error from handle message method
-     *
-     * @param \Exception $e
-     * @return mixed
-     */
-    abstract public function errorHandler(\Exception $e);
 
     /**
      * Run worker
