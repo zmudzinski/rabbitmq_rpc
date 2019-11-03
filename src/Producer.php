@@ -17,7 +17,7 @@ class Producer
 
     public function __construct(string $queueName = 'default')
     {
-        $this->queueName = $queueName;
+        $this->setQueueName($queueName);
         $this->withoutWaiting = false;
 
         $this->connection = new AMQPStreamConnection(
@@ -46,6 +46,18 @@ class Producer
                 'onResponse'
             ]
         );
+    }
+
+    /**
+     * Set the queue name
+     *
+     * @param string $queueName
+     * @return Producer
+     */
+    public function setQueueName(string $queueName): Producer
+    {
+        $this->queueName = $queueName;
+        return $this;
     }
 
     /**
