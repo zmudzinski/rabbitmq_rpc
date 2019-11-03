@@ -1,9 +1,9 @@
 {
     "name": "tzmudz/rabbitmq_rpc",
     "license": "MIT",
-    "description": "Very simple RabbitMQ RPC message handler. Based on RPC example ",
+    "description": "Very simple RabbitMQ RPC message handler. Based on RPC example.",
     "type": "library",
-    "homepage": "https://github.com/tomekzmudzinski/rabbitmq_rpc",
+    "homepage": "https://github.com/zmudzinski/rabbitmq_rpc",
     "keywords": [
         "rpc",
         "rabbitmq",
