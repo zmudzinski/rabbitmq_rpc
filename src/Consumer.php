@@ -32,7 +32,15 @@ abstract class Consumer
      * @param string $message
      * @return mixed
      */
-    abstract public function handleMessage($message);
+    abstract protected function handleMessage($message);
+
+    /**
+     * Handle the error from handle message method
+     *
+     * @param \Exception $e
+     * @return mixed
+     */
+    abstract protected function handleError(\Exception $e);
 
     /**
      * Return the result of operation
@@ -105,7 +113,7 @@ abstract class Consumer
                 $this->handleMessage($req->body);
             } catch (\Exception $e) {
                 echo $this->consoleInfo($req, '=== Task Failed ===');
-                $this->errorHandler($e);
+                $this->handleError($e);
             }
 
             echo $this->consoleInfo($req, '=== Task Ends ===');
