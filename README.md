@@ -28,10 +28,10 @@ $dotenv->load();
 ```
 More information you can find here: https://github.com/vlucas/phpdotenv
 
-## Using
+## Usage
 Package comes with two classes: `Producer` and `Consumer`. 
 
-#### Producer
+### Producer
 The `Producer` class is responsible to deliver the message to RabbtiMQ. 
 
 In your application 
@@ -66,13 +66,16 @@ $producet = new Tzm\Rpc\Producer();
 $producer->withoutWaiting()->call($message);
 ```
 
-#### Consumer
+### Consumer
 To process the queued message you need `Consumer` class. This class is abstract. 
 
 You have to create a new class inherits from `Consumer` abstract class. Then you have to implement 
 several methods.
 
-**`handleMessage()`** - this method is responsible for process the message. It accepts `$message` as 
+Just like class `Producer` also have a `setQueueName()` method. 
+
+#### handleMessage()
+This method is responsible for process the message. It accepts `$message` as 
 a parameter e.g.
 ```php
 public function handleMessage($message)
@@ -80,7 +83,8 @@ public function handleMessage($message)
     echo $message;
 }
 ```
-**`handleError()`** - it's not necessary but it handle the error. If the method `handleMessage()` thrown an
+#### handleError()
+Literally it's not necessary, but it handle the error. If the method `handleMessage()` thrown an
 error it will be pass to the `errorHandler()` method. So you can do with this error what ever you want. 
 e.g. in Laravel you can log the error message:
 ```php
@@ -89,18 +93,54 @@ public function handleError(\Exception $e)
     Log::error($e->getMessage());
 }
 ``` 
+#### setResults()
+After the message is handled RabbitMQ returns response message. Initially it returns true. But if you want 
+you can use `setResult()` method to set the data you want to return. E.g.:
+```php
+public function handleMessage($message)
+{
+    $this->setResult('this_will_be_returned_to_Producer');
+}
+```
 
-After the message is handled RabbitMQ returns response message. Initially
+#### Run Consumer
 
+You inherit class of `Consumer` should look like this:
+```php
+namespace Tzm\Rpc;
 
-This class as `Producer` also have a `setQueueName()` method. 
+class EchoMessage extends Consumer
+{
+    protected function handleMessage($message)
+    {
+        echo $message;
+    }
 
+    protected function handleError(\Exception $e)
+    {
+        \Log::error($e->getMessage()); // In Laravel Log exception message
+    }
+}
+```
+Then you can run the Consumer:
+```php
+$consumer = new EchoMessage();
+$consumer->run();
+```
+#### Console information
+Additionally there are two methods:
+##### consoleMessage($req) 
+It's used to display message in console. It has one parameter `$req` - containing all info about recievied 
+message. By default this method returns string: `New request` so if new message will be delivered 
+the console should print: 
+```
+[03.11 20:57:02] New request === Task Starts ===
+[03.11 20:57:05] New request === Task Ends ===
+```
+Whole message could be change by overriding `consoleInfo()` method.
 
 **ATTENTION!**
 Don't forget to run Consumer class first (it will create the queue on RabbitMQ server)
 
 ## License 
 MIT
-
-
-
