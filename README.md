@@ -2,6 +2,9 @@
 
 This package makes ready to use implementation of RabbitMQ RPC tutorial published on:
 https://www.rabbitmq.com/tutorials/tutorial-six-php.html
+It implements both server side and client. So thanks to this package you will be able to send a message
+to RabbtiMQ, then receive this message (on server side) handle it and finally send the response 
+to the client (Producer).
 
 ## Installation
 Install package by Composer:
