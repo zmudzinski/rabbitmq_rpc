@@ -2,16 +2,20 @@
 
 This package makes ready to use implementation of RabbitMQ RPC tutorial published on:
 https://www.rabbitmq.com/tutorials/tutorial-six-php.html
-It implements both server side and client. So thanks to this package you will be able to send a message
+It implements both server side and client. 
+
+**So thanks to this package you will be able to send a message
 to RabbtiMQ, then receive this message (on server side) handle it and finally send the response 
-to the client (Producer).
+to the client (Producer).**
+
+**Unlike to tutorial this package is set to save the queue and messages after reboot RabbtiMQ server.**
 
 ## Installation
 Install package by Composer:
-```php
+```
 composer require tzmudz/rabbitmq_rpc
 ```
-Package use a *Environment Variables* delivered by `vlucas/phpdotenv` package. So 
+Package use an *Environment Variables* delivered by `vlucas/phpdotenv` package. So 
 you have to create an `.env` file in root folder containing variables:
 
 ```dotenv
@@ -138,8 +142,8 @@ It's used to display message in console. It has one parameter `$req` - containin
 message. By default this method returns string: `New request` so if new message will be delivered 
 the console should print: 
 ```
-[03.11 20:57:02] New request === Task Starts ===
-[03.11 20:57:05] New request === Task Ends ===
+[04.11 11:03:49] [NEW] New request
+[04.11 11:03:49] [OK] New request
 ```
 Whole message could be change by overriding `consoleInfo()` method.
 
