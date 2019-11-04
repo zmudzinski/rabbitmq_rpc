@@ -86,7 +86,7 @@ abstract class Consumer
     protected function consoleInfo($req, string $additional = null)
     {
         $date = new \DateTime();
-        echo sprintf(" [%s] %s\n", $date->format('d.m H:i:s'), $this->consoleMessage($req) . ' ' . $additional);
+        echo sprintf(" [%s] %s %s\n", $date->format('d.m H:i:s'), $additional, $this->consoleMessage($req));
     }
 
     /**
@@ -118,20 +118,20 @@ abstract class Consumer
 
         $channel->queue_declare($this->queueName, false, true, false, false);
 
-        echo " [x] Awaiting RPC requests\n";
+        echo "[x] Awaiting RPC requests (Queue: {$this->queueName})\n";
 
         $callback = function ($req) {
 
-            echo $this->consoleInfo($req, '=== Task Starts ===');
+            echo $this->consoleInfo($req, '[NEW]');
 
             try {
                 $this->handleMessage($req->body);
             } catch (\Exception $e) {
-                echo $this->consoleInfo($req, '=== Task Failed ===');
+                echo $this->consoleInfo($req, '[ERR]');
                 $this->handleError($e);
             }
 
-            echo $this->consoleInfo($req, '=== Task Ends ===');
+            echo $this->consoleInfo($req, '[OK]');
 
             $msg = new AMQPMessage($this->getResult(), array('correlation_id' => $req->get('correlation_id')));
 
