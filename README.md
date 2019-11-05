@@ -28,7 +28,7 @@ RABBTIMQ_PASSWORD=guest
 Thus if you are using e.g. Laravel all you have to do is to put this variables in your `.env` 
 app file.
 
-**Notice** If your application don't use `.env` files, don't forget to load them by executing the code:
+**Notice** If your application doesn't use `.env` files, don't forget to load them by executing the code:
 ```php
 $dotenv = Dotenv\Dotenv::create(__DIR__);
 $dotenv->load();
@@ -90,7 +90,7 @@ public function handleMessage($message)
 ```
 #### handleError()
 Literally it's not necessary, but it handle the error. If the method `handleMessage()` thrown an
-error it will be pass to the `errorHandler()` method. So you can do with this error what ever you want. 
+error it will be pass to the `handleError()` method. So you can do with this error what ever you want. 
 e.g. in Laravel you can log the error message:
 ```php
 public function handleError(\Exception $e)

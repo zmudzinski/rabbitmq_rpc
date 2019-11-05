@@ -4,6 +4,13 @@
     "description": "Very simple RabbitMQ RPC message handler. Based on RPC example.",
     "type": "library",
     "homepage": "https://github.com/zmudzinski/rabbitmq_rpc",
+    "authors": [
+        {
+            "name": "Tomek Żmudziński",
+            "email": "t.zmudzinski@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
     "keywords": [
         "rpc",
         "rabbitmq",
@@ -19,14 +26,6 @@
     "autoload": {
         "psr-4": {
             "Tzm\\Rpc\\": "src/"
-        },
-        "license": "MIT",
-        "authors": [
-            {
-                "name": "Tomek Żmudziński",
-                "email": "t.zmudzinski@gmail.com"
-            }
-        ],
-        "minimum-stability": "stable"
+        }
     }
 }
