@@ -122,13 +122,13 @@ abstract class Consumer
 
         $callback = function ($req) {
 
-            echo $this->consoleInfo($req, '[NEW]');
+            echo $this->consoleInfo($req, '[NEW--]');
 
             try {
                 $this->handleMessage($req->body);
-                echo $this->consoleInfo($req, '[OK]');
+                echo $this->consoleInfo($req, '[DONE-]');
             } catch (\Exception $e) {
-                echo $this->consoleInfo($req, '[ERR]');
+                echo $this->consoleInfo($req, '[ERR--]');
                 $this->handleError($e);
             }
 

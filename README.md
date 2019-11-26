@@ -1,4 +1,7 @@
 # RabbitMQ RPC message 
+
+![stable](https://img.shields.io/github/v/tag/zmudzinski/rabbitmq_rpc?label=stable&style=flat-square)
+
 This package makes ready to use implementation of RabbitMQ RPC tutorial published on:
 https://www.rabbitmq.com/tutorials/tutorial-six-php.html
 It implements both server side and client. 
