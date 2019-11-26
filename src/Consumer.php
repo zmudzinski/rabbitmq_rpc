@@ -126,12 +126,11 @@ abstract class Consumer
 
             try {
                 $this->handleMessage($req->body);
+                echo $this->consoleInfo($req, '[OK]');
             } catch (\Exception $e) {
                 echo $this->consoleInfo($req, '[ERR]');
                 $this->handleError($e);
             }
-
-            echo $this->consoleInfo($req, '[OK]');
 
             $msg = new AMQPMessage($this->getResult(), array('correlation_id' => $req->get('correlation_id')));
 
