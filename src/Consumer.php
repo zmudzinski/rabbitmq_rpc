@@ -65,7 +65,7 @@ abstract class Consumer
     }
 
     /**
-     * Set the result of operation
+     * Set a response for the Producer
      *
      * @param string $result
      * @return mixed
@@ -122,13 +122,13 @@ abstract class Consumer
 
         $callback = function ($req) {
 
-            echo $this->consoleInfo($req, '[NEW--]');
+            echo $this->consoleInfo($req, '[-NEW-]');
 
             try {
                 $this->handleMessage($req->body);
-                echo $this->consoleInfo($req, '[DONE-]');
+                echo $this->consoleInfo($req, '[-DONE-]');
             } catch (\Exception $e) {
-                echo $this->consoleInfo($req, '[ERR--]');
+                echo $this->consoleInfo($req, '[-ERR-]: ' . $e->getMessage());
                 $this->handleError($e);
             }
 
